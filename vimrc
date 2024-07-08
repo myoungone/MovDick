@@ -7,6 +7,7 @@ filetype indent on
 
 " My configs
 set number
+set mouse=a
 
 " Enter to turn off search results
 nnoremap <silent> <CR> :nohlsearch<CR><CR>
