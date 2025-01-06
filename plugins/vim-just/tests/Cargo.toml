@@ -1,0 +1,24 @@
+[package]
+name    = "tests"
+authors = ["Casey Rodarmor <casey@rodarmor.com>", "Noah Bogart <noah.bogart@hey.com"]
+edition = "2021"
+default-run = "tests"
+
+[[bin]]
+name = "test-ftdetect"
+path = "src/test-ftdetect.rs"
+
+[lints.clippy]
+get_unwrap = "warn"
+used_underscore_binding = "deny"
+
+[dependencies]
+ctrlc        = "3.4.5"
+fancy-regex  = "0.14.0"
+rand         = "0.8.5"
+rayon        = "1.10.0"
+serde        = { version = "1.0.214", features = ["derive"] }
+serde_yaml2  = "0.1.2"
+similar      = "2.6.0"
+tempfile     = "3.10.1"
+wait-timeout = "0.2.0"

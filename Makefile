@@ -16,17 +16,17 @@ install:
 		echo 'export PATH="$(INSTALL_DIR):$$PATH"' >> $(HOME)/.bashrc; \
 		echo 'Added $(INSTALL_DIR) to PATH in .bashrc'; \
 	fi
-	echo "Please re-login to apply the changes"; \
+	@echo "Please re-login to apply the changes"; \
 
 clean:
 	# Remove the vim script and vi symbolic link
 	@rm -f $(INSTALL_DIR)/$(SCRIPT)
 	@rm -f $(INSTALL_DIR)/$(LINK)
-	echo "Please re-login to apply the changes"; \
+	@echo "Please re-login to apply the changes"; \
 
 # Dockerfile 
 build:
-	docker build --rm -t myoungone/vim:0.1 --file Dockerfile .
+	docker build --rm -t myoungone/vim:0.1.1 --file Dockerfile .
 
 push:
-	docker push myoungone/vim:0.1
+	docker push myoungone/vim:0.1.1

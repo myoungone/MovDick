@@ -1,6 +1,6 @@
 #! /bin/bash
 
-IMAGE=myoungone/vim:0.1
+IMAGE=myoungone/vim:0.1.1
 
 # volume mount file directory to container /home
 VOL=$PWD

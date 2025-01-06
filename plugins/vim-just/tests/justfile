@@ -1,0 +1,56 @@
+# To enable using preview recipes from cwd inside tests/
+set fallback
+
+# Newline-separated list of test cases that are _not_ intended to be runnable justfiles.
+cases_invalid_justfiles := """
+  comment
+  deprecated_obsolete
+  invalid
+  mod
+  set
+"""
+
+# run syntax highlighting tests
+run FILTER='':
+  cargo run {{ if FILTER == '' { '' } else { '-- ' + quote(FILTER) } }}
+
+# run tests whenever a file changes
+[positional-arguments]
+watch *args:
+  {{if args =~ '(?:^|\s)watch(?:\s|$)' { error('`just watch watch` is redundant') } else { '' } }}
+  watchexec \
+    --clear \
+    --shell=none \
+    --project-origin {{quote(clean(source_directory() / '..'))}} \
+    --watch {{quote(clean(source_directory() / '..'))}} \
+    {{quote(just_executable())}} "$@"
+
+# run ftdetect tests
+ftdetect:
+  cargo run --bin=test-ftdetect
+
+# install development dependencies
+deps:
+  cargo install watchexec-cli
+
+# compile test runner without running tests
+build:
+  cargo build
+
+# for test runner development: strict production-level checks on test runner code
+lint:
+  cargo clippy --all-targets --all-features -- -Dwarnings
+  cargo fmt --all --check
+
+# for test case development: verify that test case files are valid justfiles
+check-cases:
+  #!/bin/bash
+  set -e
+  declare -rA cases_invalid_justfiles=({{ \
+    replace_regex(cases_invalid_justfiles, "([^\n]+)", '["cases/${1}.just"]=1, ') \
+  }})
+  for case in cases/*.just;do
+    if [[ -z "${cases_invalid_justfiles["$case"]}" ]];then
+      {{quote(just_executable())}} --unstable -f "$case" --list >/dev/null
+    fi
+  done

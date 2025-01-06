@@ -1,0 +1,83 @@
+xdg_cache <span class="Operator">:=</span> <span class="Function">cache_directory</span>()
+xdg_config <span class="Operator">:=</span> <span class="Function">config_directory</span>()
+xdg_config_local <span class="Operator">:=</span> <span class="Function">config_local_directory</span>()
+xdg_data <span class="Operator">:=</span> <span class="Function">data_directory</span>()
+xdg_data_local <span class="Operator">:=</span> <span class="Function">data_local_directory</span>()
+xdg_executable <span class="Operator">:=</span> <span class="Function">executable_directory</span>()
+xdg_home <span class="Operator">:=</span> <span class="Function">home_directory</span>()
+
+mydir <span class="Operator">:=</span> <span class="Function">justfile_dir</span>()
+invoked_from <span class="Operator">:=</span> <span class="Function">invocation_dir_native</span>()
+
+random1 <span class="Operator">:=</span> <span class="Function">choose</span>(<span class="String">'10'</span>, <span class="Constant">HEXLOWER</span> <span class="Operator">+</span> <span class="Function">replace_regex</span>(<span class="Constant">HEXUPPER</span>, <span class="String">'\d+'</span>, <span class="String">''</span>))
+
+example_url <span class="Operator">:=</span> <span class="String">'https://foo.example/?parameter='</span> <span class="Operator">+</span> <span class="Function">encode_uri_component</span>(
+  <span class="Function">prepend</span>(<span class="String">'/'</span>, <span class="Function">append</span>(<span class="String">'/'</span>, <span class="String">'foo bar baz '</span> <span class="Operator">+</span> <span class="Constant">HEX</span>))
+)
+
+shell_expanded1 <span class="Operator">:=</span> <span class="String">x'</span><span class="PreProc">$SHELL</span><span class="String"> -c '</span>
+shell_expanded2 <span class="Operator">:=</span> <span class="String">x"</span><span class="PreProc">${SHELL</span><span class="Operator">:-</span><span class="Character">/bin/sh</span><span class="PreProc">}</span><span class="String"> -c "</span>
+shell_expanded3 <span class="Operator">:=</span> <span class="String">x'''</span>
+<span class="String">  </span><span class="PreProc">$_</span><span class="String">'''</span>
+shell_expanded4 <span class="Operator">:=</span> <span class="String">x"""</span>
+<span class="String">  </span><span class="PreProc">${FOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO</span><span class="Operator">:-</span><span class="Character">foo</span><span class="Special">\r\n</span>
+<span class="Character">  bar</span>
+<span class="Character">     baz</span><span class="PreProc">}</span>
+<span class="String">  </span><span class="PreProc">$DIS</span><span class="Special">\</span>
+<span class="PreProc">  PLAY</span>
+<span class="String">  Foo</span>
+<span class="String">"""</span>
+shell_expanded5 <span class="Operator">:=</span> <span class="String">x'''</span>
+<span class="String">  </span><span class="PreProc">${FOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO</span><span class="Operator">:-</span><span class="Character">foo\r\n</span>
+<span class="Character">  bar</span>
+<span class="Character">     baz</span><span class="PreProc">}</span>
+<span class="String">'''</span>
+shell_expanded6 <span class="Operator">:=</span> <span class="String">x'</span><span class="Special">$$$$</span><span class="String">not_an_env_var </span><span class="Special">$$$$</span><span class="String">{also_not_an_env_var}'</span>
+shell_expanded7 <span class="Operator">:=</span> <span class="String">x'''</span>
+<span class="String">  </span><span class="PreProc">${FOOOOOOOOOOOOOOOOO</span><span class="Operator">:-</span><span class="Character">bar \</span>
+<span class="Character">  baz</span>
+<span class="Character">  </span><span class="PreProc">}</span>
+<span class="String">'''</span>
+shell_expanded8 <span class="Operator">:=</span> <span class="String">x"""</span>
+<span class="String">  </span><span class="Special">$</span><span class="Special">\</span>
+<span class="Special">  $</span><span class="Special">\</span>
+<span class="String">  </span><span class="PreProc">$</span><span class="Special">\</span>
+<span class="PreProc">  {</span><span class="Special">\</span>
+<span class="PreProc">  F</span><span class="Special">\</span>
+<span class="PreProc">  O</span><span class="Special">\</span>
+<span class="PreProc">  O</span><span class="Special">\</span>
+<span class="PreProc">  </span><span class="Operator">:</span><span class="Special">\</span>
+<span class="Operator">  -</span><span class="Special">\</span>
+<span class="Character">  f</span><span class="Special">\</span>
+<span class="Character">  o</span><span class="Special">\</span>
+<span class="Character">  o</span><span class="Special">\</span>
+<span class="Character">  </span><span class="PreProc">}</span><span class="Special">\</span>
+<span class="String">"""</span>
+
+_true <span class="Operator">:=</span> <span class="Exception">assert</span>(<span class="String">'1'</span> <span class="Conditional">!=</span> <span class="String">'0'</span>, <span class="String">'1 is not 0'</span>)
+
+shell_command <span class="Operator">:=</span> <span class="Function">shell</span>(<span class="String">'echo "$@"'</span>, _true, random1)
+
+this_source <span class="Operator">:=</span> <span class="Function">source_directory</span>() <span class="Operator">+</span> <span class="String">"</span><span class="Special">\n</span><span class="String"> -&gt; "</span> <span class="Operator">+</span> <span class="Function">source_file</span>()
+current_module <span class="Operator">:=</span> <span class="Function">module_directory</span>() <span class="Operator">+</span> <span class="String">"</span><span class="Special">\n</span><span class="String"> -&gt; "</span> <span class="Operator">+</span> <span class="Function">module_file</span>()
+
+<span class="Statement">unexport</span> QT_QPA_PLATFORMTHEME
+
+now <span class="Operator">:=</span> <span class="Function">datetime</span>(<span class="String">'%Y-%m-%d %H:%M:%S %Z'</span>)
+now_utc <span class="Operator">:=</span> <span class="Function">datetime_utc</span>(<span class="String">'%Y-%m-%d %H:%M:%S %Z'</span>)
+
+<span class="Type">[private]</span>
+hidden <span class="Operator">:=</span> <span class="String">'foo'</span>
+not_hidden <span class="Operator">:=</span> <span class="String">'-'</span> <span class="Operator">+</span> hidden
+
+u_escape <span class="Operator">:=</span> <span class="String">"test </span><span class="Special">\u{1F916}</span><span class="String"> test"</span>
+u_escape_triple_quoted <span class="Operator">:=</span> <span class="String">"""</span>
+<span class="String">  test</span>
+<span class="String">  </span><span class="Special">\u{1f9Ea}</span>
+<span class="String">  test</span>
+<span class="String">"""</span>
+u_escape_shell_expanded <span class="Operator">:=</span> <span class="String">x"shell </span><span class="PreProc">${FOO</span><span class="Operator">:-</span><span class="Character">(</span><span class="Special">\u{1f41a}</span><span class="Character">)</span><span class="PreProc">}</span><span class="String"> shell"</span>
+u_escape_shell_expanded_name <span class="Operator">:=</span> <span class="String">x"""</span>
+<span class="String">  TERM=</span><span class="PreProc">${</span><span class="Special">\u{000054}\u{00045}\u{0052}\u{04d}</span><span class="PreProc">}</span><span class="String">"""</span>
+u_escape_in_replace_regex <span class="Operator">:=</span> <span class="Function">replace_regex</span>(<span class="String">'foo'</span>, <span class="String">'^.'</span>, <span class="String">"</span><span class="Special">\u{46}</span><span class="String">"</span>)
+not_u_escape <span class="Operator">:=</span> <span class="String">'\u{1F916}'</span>

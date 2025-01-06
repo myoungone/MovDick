@@ -1,0 +1,29 @@
+<span class="Keyword">mod</span> <span class="Identifier">foo</span>
+
+<span class="Comment"># the trailing whitespace at the end of the following line is intentional</span>
+<span class="Keyword">mod</span> <span class="Identifier">foo</span> 
+
+<span class="Keyword">mod</span> <span class="Identifier">foo</span> <span class="String">"foo/justfile"</span>
+
+<span class="Keyword">mod</span> <span class="Identifier">_foo-Foo</span> <span class="Special">\</span>
+  <span class="String">'foo/foo.just'</span>
+
+<span class="Keyword">mod</span><span class="Conditional">?</span> <span class="Identifier">foo</span>
+
+<span class="Keyword">mod</span> <span class="Conditional">?</span> <span class="Identifier">foo</span> <span class="String">'foo/justfile'</span>
+
+<span class="Keyword">mod</span> <span class="Identifier">foo</span> <span class="String">x'</span><span class="PreProc">$FOO</span><span class="String">/justfile'</span>
+<span class="Keyword">mod</span><span class="Conditional">?</span> <span class="Identifier">foo</span> <span class="String">x"</span><span class="PreProc">$FOO</span><span class="String">/justfile"</span>
+
+<span class="Keyword">mod</span> <span class="Identifier">foo</span>  <span class="Comment"># comment</span>
+<span class="Keyword">mod</span> <span class="Identifier">foo</span><span class="Comment">#comment</span>
+<span class="Keyword">mod</span> <span class="Identifier">foo</span> <span class="Special">\</span>
+  <span class="Comment"># comment</span>
+
+<span class="Keyword">mod</span> <span class="Identifier">foo</span><span class="String">"foo.just"</span>
+
+<span class="Comment"># not a shell-expanded string</span>
+<span class="Keyword">mod</span><span class="Conditional">?</span> <span class="Identifier">x</span><span class="String">"$FOO.just"</span>
+
+<span class="Type">[doc(</span><span class="String">"documented module"</span><span class="Type">)]</span>
+<span class="Keyword">mod</span> <span class="Identifier">foo</span>
